@@ -1,2 +1,4 @@
 # Bilibili_dynamic
-单独的B博android应用
+extract the dynamic function from the bilibili.com as a android application
+
+单独的B博动态android应用
