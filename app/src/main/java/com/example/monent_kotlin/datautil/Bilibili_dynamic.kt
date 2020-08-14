@@ -56,6 +56,7 @@ class Bilibili_dynamic {
          * history_offset : 422852024359149298
          * _gt_ : 0
          */
+        var is_liked= ""
         var new_num = ""
         var exist_gap = ""
         var update_num = ""

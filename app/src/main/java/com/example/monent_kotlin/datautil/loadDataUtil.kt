@@ -34,6 +34,8 @@ object loadDataUtil{
             "8"->"video"
             "4"->"normal_commit_withoutpic"
             "2048"->"topic"
+            "64"->"article"
+            "512"->"bangumi"
             else -> "others"
         }
     }
@@ -43,65 +45,90 @@ object loadDataUtil{
 
         var card=Gson().fromJson(item.card,Bilibili_dynamic_card::class.java)
         var pics=card?.getItem()?.pictures?.toMutableList()?:ArrayList()
-
-//        var content=card?.getItem()?.content?:""
         var content=""
         var username=item.desc?.user_profile?.info?.uname?:""
         var usericon=item.desc?.user_profile?.info?.face?:""
-        contentBlock=ContentBlock(usericon,username,content,pics,"")
+        contentBlock=ContentBlock("","","",ArrayList(),"")
+
         //todo when sentences to deal the diffident type of the card
         var type=""
         if (item.desc?.type!=null)
             type=getType(item.desc?.type!!)
         when(type){
-            "repost"->{
-                var card_origin=Gson().fromJson(card.getOrigin(),Bilibili_dynamic_card::class.java)
-                if(card_origin.getItem()!=null)// if the origin is pic commit
-                {
-                    content=card.getItem()?.content+" \norigin: "+card_origin.getItem()?.description
-                    pics=card_origin?.getItem()?.pictures?.toMutableList()?:ArrayList()
-                }
+            "bangumi"->{
+                content=card.getApiSeasonInfo()?.title?:""
+                var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
+                temp.img_src=card.getApiSeasonInfo()?.cover
+                usericon=card.getApiSeasonInfo()?.cover?:""
+                pics.add(temp)
 
-                else//if the origin is video
+
+            }
+            "article"->{
+                content="title : "+card.title+"\n summary : "+card.summary
+                for(pic in card?.image_urls?.toMutableList()?:ArrayList())
                 {
-                    content=card.getItem()?.content+" \norigin: "+card_origin.dynamic
                     var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
-                    temp.img_src=card_origin?.pic
+                    temp.img_src=pic
                     pics.add(temp)
                 }
 
-                contentBlock=ContentBlock(usericon,username,content,pics,type)
+            }
+            "repost"->{
+                var card_origin=Gson().fromJson(card.getOrigin(),Bilibili_dynamic_card::class.java)
+                if(card_origin.getItem()!=null)// if the origin is pic commit or cast
+                {
+                    //pic commit
+                    content=card.getItem()?.content+" \norigin: "+card_origin.getItem()?.description
+                    pics=card_origin?.getItem()?.pictures?.toMutableList()?:ArrayList()
+                    type="repost_pic_commit"
+                }
+
+                else
+                {
+
+                    content=card.getItem()?.content+" \norigin: "+card_origin.dynamic
+                    if(card_origin.roomid!="")//if the origin is cast
+                        {
+                            var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
+                            temp.img_src=card_origin?.cover
+                            pics.add(temp)
+                            type="cast"
+                        }
+                    else//if the origin is video
+                    {
+                        var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
+                        temp.img_src=card_origin?.pic
+                        pics.add(temp)
+                        type="video"
+                    }
+
+                }
             }
             "normal_commit_withpic"->{
                 content=card.getItem()?.description?:""
-                contentBlock=ContentBlock(usericon,username,content,pics,type)
             }
             "normal_commit_withoutpic"->{
                 content=card.getItem()?.content?:""
-                contentBlock=ContentBlock(usericon,username,content,pics,type)
             }
             "topic"->{
                 content=card.getVest()?.content?:""
                 var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
                 temp.img_src=card.getSketch()?.cover_url
                 pics.add(temp)
-                contentBlock=ContentBlock(usericon,username,content,pics,type)
             }
             "video"->{
                 content=card.dynamic?:""
                 var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
                 temp.img_src=card?.pic
                 pics.add(temp)
-                contentBlock=ContentBlock(usericon,username,content,pics,type)
             }
             else->{
-
+                //todo other type
             }
         }
-
-
-
-
+        contentBlock=ContentBlock(usericon,username,content,pics,type)
+        contentBlock.setLike_Unlike((item.desc?.is_liked=="1"))
         return contentBlock
 
     }
@@ -110,7 +137,6 @@ object loadDataUtil{
     fun dataParsing(uid: String,viewModel: DataViewModel){
         var requestUrl="https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new?uid=${uid}&type_list=268435455"
         var response_list: MutableList<ContentBlock> = ArrayList()
-
         val stringRequest =object :StringRequest(
             Method.GET,
             requestUrl,
@@ -119,10 +145,6 @@ object loadDataUtil{
                 var cards=response.getData()?.cards
                 if (cards != null) {
                     for (item in cards) {
-
-
-
-
                         response_list.add(getContent(item))
                     }
                 }
@@ -234,34 +256,6 @@ object loadDataUtil{
         var requestList:MutableList<ContentBlock> = ArrayList()
         //todo replace uid to var
         loadDataUtil.dataParsing("11743208",dataViewModel)
-
-
-
-        //模拟网络访问
-//        android.os.Handler().postDelayed({
-//            var urlist=arrayOf("https://i0.hdslb.com/bfs/album/6e500d235f96412e76ba9f99d1f95d51fd9f6174.jpg"
-//                ,"https://wx4.sinaimg.cn/mw690/5306c1d3gy1gh90hgztcfj20tc0rvad1.jpg"
-//                ,"https://wx4.sinaimg.cn/mw690/5306c1d3gy1gh90hh0aw9j20uj0pgtc2.jpg"
-//                ,"https://ww4.sinaimg.cn/mw690/5306c1d3gw1f70j6dfceij21kw1x94fv.jpg"
-//                ,"https://ww2.sinaimg.cn/mw690/5306c1d3gw1f74udty8xmj20go08540g.jpg"
-//                ,"https://wx3.sinaimg.cn/mw690/5306c1d3gy1gh90hh7cv4j20or0updme.jpg"
-//                ,"https://wallpapershome.com/images/wallpapers/abstract-nature-7680x4320-8k-21456.jpg",
-//            "https://i0.hdslb.com/bfs/album/719e8095a3cab9ae55ff08e4fc5cefc57034b9e4.jpg")
-//
-//            var requestList:MutableList<ContentBlock> = ArrayList()
-////            for (i in 1..10){
-////                var urls:MutableList<String> = ArrayList()
-////                if (nextBoolean())
-////                urls.add(urlist.random())
-////                if (nextBoolean())
-////                urls.add(urlist.random())
-////                requestList.add(ContentBlock("user"+(100000..500000).random().toString(),urls))
-////            }
-//            requestList.reverse()
-//            dataViewModel.setContent(requestList)
-//        },1000)
-
-
     }
 
     }

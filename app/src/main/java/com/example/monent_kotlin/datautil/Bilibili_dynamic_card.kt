@@ -12,12 +12,21 @@ class Bilibili_dynamic_card {
     var desc: String? = ""
     var dynamic: String? = ""
     var pic: String? = ""
+    var title: String? = ""
+    var cover:String?=""
+    var roomid:String?=""
+    var summary: String? = ""
+    var image_urls:List<String>? = null
     private var item: ItemBean? = null
     private var origin: String? = ""
     private var user: UserBean? = null
     private var vest: VestBean? = null
     private var sketch: SketchBean?=null
+    private var apiSeasonInfo:ApiSeasonInfoBean?=null
 
+    fun getApiSeasonInfo():ApiSeasonInfoBean?{
+        return apiSeasonInfo
+    }
     fun getOrigin():String?{
         return origin
     }
@@ -41,6 +50,10 @@ class Bilibili_dynamic_card {
 
     fun setUser(user: UserBean?) {
         this.user = user
+    }
+    class ApiSeasonInfoBean{
+        var title:String?=""
+        var cover:String?=""
     }
 
     class SketchBean{
