@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.dreawercontent_layout.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +33,8 @@ class SocialFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().CollapsingToolbar.title=getString(R.string.social_title);
+
+        requireActivity().toolBar_mainActivity.title=getString(R.string.social_title);
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

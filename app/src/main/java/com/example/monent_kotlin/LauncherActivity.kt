@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.example.monent_kotlin.datautil.DataViewModel
 import kotlinx.android.synthetic.main.activity_launcher.*
 
 class LauncherActivity : AppCompatActivity() {
@@ -25,8 +27,14 @@ class LauncherActivity : AppCompatActivity() {
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                 startActivity(intent)
+                finish()
             }
         })
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(0, 0)
     }
 
 

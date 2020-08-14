@@ -1,19 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.example.monent_kotlin.datautil.DataViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_news"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".NewsFragment">
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="48dp"
+        >
 
         <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <!--<TextView
             android:id="@+id/news_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/news_title"
+            android:text="@{data.getContent().title}"
             android:gravity="center"
-            android:textSize="32dp" />
+            android:textSize="32dp" />-->
 
 
-    </FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclyerView_news"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:backgroundTint="@color/lightBule"
+                app:layout_constraintBottom_toBottomOf="@+id/recyclyerView_news"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.954"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recyclyerView_news"
+                app:layout_constraintVertical_bias="0.931"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_news"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/lightBule"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/recyclyerView_news"
+                app:layout_constraintStart_toStartOf="@+id/recyclyerView_news"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

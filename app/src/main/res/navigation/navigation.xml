@@ -25,4 +25,9 @@
         android:name="com.example.monent_kotlin.MessageFragment"
         android:label="fragment_message"
         tools:layout="@layout/fragment_message" />
+    <fragment
+        android:id="@+id/detil_layout"
+        android:name="com.example.monent_kotlin.detil_layout"
+        android:label="fragment_detil_layout"
+        tools:layout="@layout/fragment_detil_layout" />
 </navigation>
