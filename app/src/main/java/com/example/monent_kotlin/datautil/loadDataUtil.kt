@@ -87,6 +87,13 @@ object loadDataUtil{
                 pics.add(temp)
                 contentBlock=ContentBlock(usericon,username,content,pics,type)
             }
+            "video"->{
+                content=card.dynamic?:""
+                var temp=Bilibili_dynamic_card.ItemBean.PicturesBean()
+                temp.img_src=card?.pic
+                pics.add(temp)
+                contentBlock=ContentBlock(usericon,username,content,pics,type)
+            }
             else->{
 
             }
