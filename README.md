@@ -1,7 +1,7 @@
 # Bilibili_dynamic
 extract the dynamic function from the bilibili.com as a android application
 
-通过Gson解析b站借口返回的json，制作单独的B博动态android应用
+通过Gson解析b站接口返回的json，制作单独的B博动态android应用
 
 API:
 
